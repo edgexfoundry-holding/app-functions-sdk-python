@@ -1,0 +1,77 @@
+#!/usr/bin/env groovy
+@Library("devops-libraries") _
+
+def buildManager(target) {
+    def nodeLabel = common.getRunningNode(target)
+
+    node ("${nodeLabel}"){
+        stage("Checkout ${target}") {
+            cleanWs (cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true)
+            if (fileExists ("${WORKSPACE}@tmp")) { dir("${WORKSPACE}@tmp") {deleteDir()} }
+            checkout scm
+            currentBuild.displayName = "${PROJECT} ${ARCH}: ${env.BUILD_ID}"
+        }
+        stage("Unit Test ${target}") { testStage(target) }
+    }
+}
+
+def buildMap() {
+    def build = [:]
+    def targets = ["x86_64", "arm64", "arm32"]
+    for (t in targets) {
+        def target = t
+        if (("${params.ARCH}" == target || "${params.ARCH}" == "all")) {
+            build[target] = { buildManager(target) }
+        }
+    }
+    build.failFast = false
+    return build
+}
+
+def testStage(target)
+{
+    try {
+        sh "${WORKSPACE}/scripts/unit-test.sh"
+    } catch (err) {
+        unstable(message: "Unit test has failed")
+    }
+}
+
+pipeline {
+    agent none
+    parameters {
+        choice (choices: ["all", "x86_64", "arm64", "arm32"], description: 'Build Architecture', name: 'ARCH')
+        string(defaultValue: "", description: "Use default x86_64 Jenkins agent label if empty, otherwise specify a node or label for x86_64", name: "JENKINS_X86_NODE")
+        string(defaultValue: "", description: "Use default arm64 Jenkins agent label if empty, otherwise specify a node or label for arm64", name: "JENKINS_ARM64_NODE")
+        string(defaultValue: "", description: "Use default arm32 Jenkins agent label if empty, otherwise specify a node or label for arm32", name: "JENKINS_ARM32_NODE")
+    }
+
+    options {
+        buildDiscarder(logRotator (numToKeepStr: "20"))
+        timeout(time: 20, unit: "MINUTES")
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage("Prepare") {
+            steps {
+                script {
+                    // variables defined in the jenkins-pipelines
+                    def envMap = [
+                        PROJECT: "app-functions-sdk-python"
+                    ]
+                    common.setupEnv(envMap)
+                }
+            }
+        }
+
+        stage ("Run Unit Test"){
+            steps {
+                script {
+                    def buildMap = buildMap()
+                    parallel buildMap
+                }
+            }
+        }
+    }
+}

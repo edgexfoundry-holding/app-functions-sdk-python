@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "app_functions_sdk_py"
+dynamic = [ "version" ]
+authors = [
+  { name="judehung", email="judehung@iotechsys.com" },
+]
+description = "The python-based SDK to support edgexfoundry application service"
+readme = "README.md"
+license = { text = "Apache 2 License" }
+requires-python = ">=3.10"
+classifiers = [
+    'License :: OSI Approved :: Apache Software License',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11'
+]
+
+[project.urls]
+Homepage = "https://github.com/IOTechSystems/app-functions-sdk-python"
+Issues = "https://github.com/IOTechSystems/app-functions-sdk-python/issues"
