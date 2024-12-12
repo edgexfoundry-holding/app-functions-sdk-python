@@ -55,35 +55,23 @@ The SDK also provides the following built-in functions to process/transform/expo
 
 ## Run Tests
 
-To run the unit-tests against SDK, you can use the following command:
+To run the unit-tests against SDK, you will have to follow steps as described below:
 
-```shell
-make test-sdk
-```
+1. Create a virtual environment in the root of the repository in your local environment:
+   - `python3 -m venv venv`
 
-You can also run the tests against the app-service-template by using the following command:
+2. Switch to the virtual environment:
+   - `source ./venv/bin/activate`
 
-```shell
-make test-template
-```
+3. Install the dependencies for the App Functions Python SDK in the virtual environment:
+   - `pip install -r requirements.txt`
 
-To have lint to analyse the SDK, you can use the following command:
+4. Install the App Functions Python SDK in the virtual environment:
+   - `make install-sdk`
 
-```shell
-make lint
-```
+5. Run the tests against the SDK by using the following command:
+   - `make test-sdk`
 
-To run tests, and lint analysis altogether, you can use the following command:
+## Try the sample application service
 
-```shell
-make test
-```
-
-## Build Docker images
-
-To build the Docker image for the app-service-template, you can use the following command:
-
-```shell
-make docker
-```
-By a successful build, a docker image **$(USER)/app-service-template:latest** will be created in your local environment.
+To further understand the usage of this Python SDK, you can try the sample application service provided in the [app-service-template](./app-service-template) folder. This sample application service is configured with default Message Bus trigger to subscribe for any event messages published to EdgeX message bus, and process these event messages with the default pipeline containing two functions: `filter_by_device_name` and `mqtt_send`, so the app service will only process event messages coming from **Random-Integer-Device**, and then republish such event messages to an external MQTT broker **test.mosquitto.org** via **test_topic** topic.
