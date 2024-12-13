@@ -111,7 +111,7 @@ class Manager(MetricsManager):
                      f"{self._interval} seconds")
 
     def _run_loop(self, ctx_done: threading.Event, wg: WaitGroup):
-        with FunctionExitCallback(wg.done()):
+        with FunctionExitCallback(wg.done):
             while not self._stop_event.is_set():
                 if ctx_done.is_set():
                     self._stop_event.set()
