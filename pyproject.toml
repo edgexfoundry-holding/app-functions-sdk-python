@@ -11,16 +11,15 @@ authors = [
 description = "The python-based SDK to support edgexfoundry application service"
 readme = "README.md"
 license = { text = "Apache 2 License" }
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.11"
 classifiers = [
     'License :: OSI Approved :: Apache Software License',
     'Intended Audience :: Developers',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11'
+    'Programming Language :: Python :: 3.10'
 ]
 
 [project.urls]
-Homepage = "https://github.com/IOTechSystems/app-functions-sdk-python"
-Issues = "https://github.com/IOTechSystems/app-functions-sdk-python/issues"
+Homepage = "https://github.com/edgexfoundry-holding/app-functions-sdk-python"
+Issues = "https://github.com/edgexfoundry-holding/app-functions-sdk-python/issues"

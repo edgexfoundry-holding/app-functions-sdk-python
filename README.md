@@ -4,7 +4,7 @@ The EdgeXFoundry Application Functions Software Development Kit (SDK) for Python
 
 ## Prerequisites
 
-This Python SDK is supported on Python 3.10 or later.
+This Python SDK is supported on Python 3.10.
 
 ## File Structure
 
